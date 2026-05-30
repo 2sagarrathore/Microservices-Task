@@ -38,21 +38,6 @@ Microservices/
 └── docker-compose.yml
 ```
 
-**Submission folder:**
-```
-submission/
-├── user-service/
-│   └── Dockerfile
-├── product-service/
-│   └── Dockerfile
-├── order-service/
-│   └── Dockerfile
-├── gateway-service/
-│   └── Dockerfile
-├── docker-compose.yml
-└── README.md
-```
-
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) (v20+)
@@ -61,7 +46,7 @@ submission/
 ## Setup Instructions
 
 ```bash
-git clone https://github.com/mohanDevOps-arch/Microservices-Task.git
+git clone https://github.com/2sagarrathore/Microservices-Task.git
 cd Microservices-Task/Microservices
 docker compose build
 docker compose up -d
@@ -87,64 +72,48 @@ curl http://localhost:3002/health
 curl http://localhost:3003/health
 ```
 
-### Expected Responses
-
-**GET /users** → `[{"id":1,"name":"John Doe"},{"id":2,"name":"Jane Smith"}]`
-
-**GET /products** → `[{"id":1,"name":"Laptop","price":999},{"id":2,"name":"Phone","price":699}]`
-
-**GET /orders** → `[]` (empty array initially; use POST /api/orders to create orders)
-
-**GET /api/users** → same as /users, proxied through gateway
-
-**GET /api/products** → same as /products, proxied through gateway
-
-**GET /api/orders** → same as /orders, proxied through gateway
-
 ## Useful Docker Commands
 
 ```bash
-# Check running containers
 docker compose ps
-
-# View all logs
 docker compose logs
-
-# View logs for a specific service
 docker compose logs user-service
 docker compose logs product-service
 docker compose logs order-service
 docker compose logs gateway-service
-
-# Stop all containers
 docker compose down
-
-# Rebuild and restart
 docker compose up --build
 ```
 
 ## Troubleshooting
 
-- **Port already in use**: Stop the existing process (`lsof -i :<port>` to find it) or change the host port in docker-compose.yml
+- **Port already in use**: Stop the existing process or change the host port in docker-compose.yml
 - **Container exits immediately**: Check `docker compose logs <service-name>`
-- **npm ci fails**: The packages use `npm install` fallback if no lock file is present
-- **Gateway cannot reach services**: Ensure all containers are on the `microservices-network`; gateway uses Docker service names (`user-service`, `product-service`, `order-service`), not `localhost`
-- **Rebuild after changes**: Run `docker compose up --build` to rebuild images
+- **Gateway cannot reach services**: Ensure all containers are on `microservices-network`; gateway uses Docker service names, not `localhost`
+- **Rebuild after changes**: Run `docker compose up --build`
 
 ## Screenshots
 
-### docker compose ps
-> Run `docker compose ps` after `docker compose up -d` and capture the output showing all 4 containers in **running** state.
+### 1. docker compose ps — all 4 containers running
+![docker compose ps](submission/screenshots/01_docker_compose_ps.png)
 
-### Service Responses
-> Capture `curl http://localhost:3000/users` showing the users JSON array.
+### 2. docker compose logs — all services started
+![docker compose logs](submission/screenshots/02_docker_compose_logs.png)
 
-> Capture `curl http://localhost:3001/products` showing the products JSON array.
+### 3. user-service — GET /users
+![curl users](submission/screenshots/03_curl_users.png)
 
-> Capture `curl http://localhost:3002/orders` showing the orders array (empty `[]` is valid).
+### 4. product-service — GET /products
+![curl products](submission/screenshots/04_curl_products.png)
 
-> Capture `curl http://localhost:3003/api/users` showing gateway proxying to user-service.
+### 5. order-service — GET /orders
+![curl orders](submission/screenshots/05_curl_orders.png)
 
-> Capture `curl http://localhost:3003/api/products` showing gateway proxying to product-service.
+### 6. gateway — GET /api/users (proxied)
+![gateway users](submission/screenshots/06_curl_gateway_users.png)
 
-> Capture `curl http://localhost:3003/api/orders` showing gateway proxying to order-service.
+### 7. gateway — GET /api/products (proxied)
+![gateway products](submission/screenshots/07_curl_gateway_products.png)
+
+### 8. gateway — GET /api/orders (proxied)
+![gateway orders](submission/screenshots/08_curl_gateway_orders.png)
